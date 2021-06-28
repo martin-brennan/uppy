@@ -88,8 +88,7 @@ en_US.strings = {
   pause: 'Pause',
   pauseUpload: 'Pause upload',
   paused: 'Paused',
-  poweredBy: 'Powered by',
-  poweredBy2: '%{backwardsCompat} %{uppy}',
+  poweredBy: 'Powered by %{uppy}',
   processingXFiles: {
     '0': 'Processing %{smart_count} file',
     '1': 'Processing %{smart_count} files',
