@@ -60,7 +60,8 @@ function buildPluginsList () {
     if (pluginName === 'locales'
         || pluginName === 'react-native'
         || pluginName === 'vue'
-        || pluginName === 'svelte') {
+        || pluginName === 'svelte'
+        || pluginName === 'angular') {
       continue
     }
     const Plugin = require(dirName)
@@ -68,8 +69,6 @@ function buildPluginsList () {
 
     // A few hacks to emulate browser environment because e.g.:
     // GoldenRetrieves calls upon MetaDataStore in the constructor, which uses localStorage
-    // @TODO Consider rewriting constructors so they don't make imperative calls that rely on
-    // browser environment (OR: just keep this browser mocking, if it's only causing issues for this script, it doesn't matter)
     global.location = { protocol: 'https' }
     global.navigator = { userAgent: '' }
     global.localStorage = {
@@ -170,13 +169,13 @@ function createTypeScriptLocale (plugin, pluginName) {
   const localePath = path.join(__dirname, '..', 'packages', '@uppy', pluginName, 'types', 'generatedLocale.d.ts')
 
   const localeTypes
-    = `${'import Uppy = require(\'@uppy/core\')\n'
+    = `${'import type { Locale } from \'@uppy/core\'\n'
     + '\n'
-    + `type ${pluginClassName}Locale = Uppy.Locale` + '<\n'}${
+    + `type ${pluginClassName}Locale = Locale` + '<\n'}${
       allowedStringTypes}\n`
     + `>\n`
     + `\n`
-    + `export = ${pluginClassName}Locale\n`
+    + `export default ${pluginClassName}Locale\n`
 
   fs.writeFileSync(localePath, localeTypes)
 }

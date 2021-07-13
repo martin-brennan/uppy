@@ -23,7 +23,8 @@ class ReduxStore {
     this._id = opts.id || cuid()
     this._selector = opts.selector || defaultSelector(this._id)
 
-    // Initialise the `uppy[id]` state key.
+    // Calling `setState` to dispatch an action to the Redux store.
+    // The intent is to make sure that the reducer has run once.
     this.setState({})
   }
 
@@ -76,10 +77,8 @@ function middleware () {
   }
 }
 
-module.exports = function createReduxStore (opts) {
-  return new ReduxStore(opts)
-}
-
+module.exports = ReduxStore
+module.exports.ReduxStore = ReduxStore
 module.exports.STATE_UPDATE = STATE_UPDATE
 module.exports.reducer = reducer
 module.exports.middleware = middleware

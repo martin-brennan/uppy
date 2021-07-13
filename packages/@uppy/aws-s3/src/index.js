@@ -15,8 +15,8 @@
  * will expire before some files can be uploaded.
  *
  * The long-term solution to this problem is to change the upload pipeline so that files
- * can be sent to the next step individually. That requires a breakig change, so it is
- * planned for Uppy v2.
+ * can be sent to the next step individually. That requires a breaking change, so it is
+ * planned for some future Uppy version.
  *
  * In the mean time, this plugin is stuck with a hackier approach: the necessary parts
  * of the XHRUpload implementation were copied into this plugin, as the MiniXHRUpload
@@ -27,7 +27,7 @@
 
 const { BasePlugin } = require('@uppy/core')
 const Translator = require('@uppy/utils/lib/Translator')
-const RateLimitedQueue = require('@uppy/utils/lib/RateLimitedQueue')
+const { RateLimitedQueue, internalRateLimitedQueue } = require('@uppy/utils/lib/RateLimitedQueue')
 const settle = require('@uppy/utils/lib/settle')
 const hasProperty = require('@uppy/utils/lib/hasProperty')
 const { RequestClient } = require('@uppy/companion-client')
@@ -279,7 +279,7 @@ module.exports = class AwsS3 extends BasePlugin {
       responseUrlFieldName: 'location',
       timeout: this.opts.timeout,
       // Share the rate limiting queue with XHRUpload.
-      __queue: this.requests,
+      [internalRateLimitedQueue]: this.requests,
       responseType: 'text',
       getResponseData: this.opts.getResponseData || defaultGetResponseData,
       getResponseError: defaultGetResponseError,
